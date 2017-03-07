@@ -48,9 +48,9 @@ public class BluetoothChatService {
 
     // Unique UUID for this application
     private static final UUID MY_UUID_SECURE =
-            UUID.fromString("fa87c0d0-afac-11de-8a39-0800200c9a66");
+            UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
     private static final UUID MY_UUID_INSECURE =
-            UUID.fromString("8ce255c0-200a-11e0-ac64-0800200c9a66");
+            UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
 
     // Member fields
     private final BluetoothAdapter mAdapter;
@@ -424,17 +424,22 @@ public class BluetoothChatService {
                 // This is a blocking call and will only return on a
                 // successful connection or an exception
                 mmSocket.connect();
+
             } catch (IOException e) {
-                // Close the socket
-                try {
-                    mmSocket.close();
-                } catch (IOException e2) {
-                    Log.e(TAG, "unable to close() " + mSocketType +
-                            " socket during connection failure", e2);
-                }
-                connectionFailed();
-                return;
+
+
+
+            // Close the socket
+            try {
+                mmSocket.close();
+            } catch (IOException e2) {
+                Log.e(TAG, "unable to close() " + mSocketType +
+                        " socket during connection failure", e2);
             }
+            connectionFailed();
+            return;
+        }
+
 
             // Reset the ConnectThread because we're done
             synchronized (BluetoothChatService.this) {
@@ -493,8 +498,10 @@ public class BluetoothChatService {
                     // Read from the InputStream
                     bytes = mmInStream.read(buffer);
 
+
+
                     // Send the obtained bytes to the UI Activity
-                    mHandler.obtainMessage(Constants.MESSAGE_READ, bytes, -1, buffer)
+                   mHandler.obtainMessage(Constants.MESSAGE_READ, bytes, -1, buffer)
                             .sendToTarget();
                 } catch (IOException e) {
                     Log.e(TAG, "disconnected", e);
@@ -503,6 +510,8 @@ public class BluetoothChatService {
                 }
             }
         }
+
+
 
         /**
          * Write to the connected OutStream.
@@ -529,4 +538,5 @@ public class BluetoothChatService {
             }
         }
     }
+
 }
